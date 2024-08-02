@@ -1,11 +1,19 @@
 import { useForm } from "react-hook-form";
 import Modal from "../ui/Modal";
+import { useDispatch } from "react-redux";
+import { addTask } from "../../redux/features/tasks/tasksSlice";
 
 const AddTaskModal = ({ isOpen, setIsOpen }) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch();
 
+  const onCancel = () => {
+    reset();
+    setIsOpen(false);
+  };
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(addTask(data));
+    onCancel();
   };
 
   return (
@@ -60,13 +68,21 @@ const AddTaskModal = ({ isOpen, setIsOpen }) => {
             <option value="low">Low</option>
           </select>
         </div>
-
-        <button
-          type="submit"
-          className="mt-4 w-full rounded-lg bg-blue-600 py-2 "
-        >
-          Submit
-        </button>
+        <div className="flex justify-around gap-5 text-white">
+          <button
+            onClick={() => onCancel()}
+            type="button"
+            className="mt-4 w-full rounded-lg bg-rose-600 py-2 "
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="mt-4 w-full rounded-lg bg-blue-600 py-2 "
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </Modal>
   );
